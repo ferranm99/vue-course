@@ -22,7 +22,7 @@
 
     button.onclick = () => {
       while (playersDiv.firstChild) {
-        playersDiv.removeChild(playersDiv.firstChild);
+        playersDiv.removeChild(playersDiv.firstChild); //sin virtualdom tenemos que eliminar todos los elementos antes de refrescar y es ineficiente
       }
 
       state.players.forEach(p => {
