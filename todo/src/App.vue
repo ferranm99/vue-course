@@ -5,6 +5,7 @@
   </nav>
 
   <main class="container">
+    <Alert :show="showAlert" text="You need to type something first!" type="warning" @close="showAlert = false"/>
     <section>
       <form class="add-todo-form">
         <!-- v-on:input="(e) => todoTitle = e.target.value" is the same as below-->
@@ -27,11 +28,16 @@
 </template>
 
 <script>
+import Alert from './components/Alert.vue';
   export default {
+    components:{
+      Alert,
+    },
     data(){
       return {
         todoTitle : "",
-        todos: []
+        todos: [],
+        showAlert: false
       }
     },
     methods : {
@@ -40,7 +46,10 @@
           this.todos.push({
             title: this.todoTitle,
             id: Math.floor(Math.random()*1000)
-        })
+          })
+          this.showAlert = false;
+        }else{
+          this.showAlert = true;
         }
         this.todoTitle = ""
       },
@@ -99,5 +108,6 @@
   font-size: 30px;
   color: var(--text-color);
   background: var(--danger-color);
+  cursor:pointer;
 }
 </style>
