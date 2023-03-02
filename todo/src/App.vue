@@ -16,10 +16,10 @@
     </section>
 
     <section>
-      <div v-for="todo in todos" class="todo">
-        <p>{{ todo }}</p>
+      <div v-for="todo in todos" class="todo" v-bind:key="todo.id">
+        <p>{{ todo.title }}</p>
         <div>
-          <button @click.prevent="removeTodo(todo)" class="remove-todo-btn">&times;</button>
+          <button @click.prevent="removeTodo(todo.title)" class="remove-todo-btn">&times;</button>
         </div>
       </div>
     </section>
@@ -36,11 +36,16 @@
     },
     methods : {
       addTodo(){
-        this.todos.push(this.todoTitle)
+        if(this.todoTitle != ""){
+          this.todos.push({
+            title: this.todoTitle,
+            id: Math.floor(Math.random()*1000)
+        })
+        }
         this.todoTitle = ""
       },
       removeTodo(title){
-        this.todos = this.todos.filter(todo => todo !== title)
+        this.todos = this.todos.filter(todo => todo.title !== title)
       }
     }
   };
