@@ -1,12 +1,14 @@
 <template>
   <div v-if="show" class="alert" :style="{ backgroundColor }">
     <div>{{ message }}</div>
-    <div @click="$emit('close')" class="close-alert">&times;</div>
+    <Btn circle type="danger" class="btn" @click="$emit('close')">&times;</Btn>
   </div>
 </template>
 
 <script>
+import Btn from './Btn.vue';
 export default {
+  components: { Btn },
   props: {
     message: {
       required: true,
@@ -52,8 +54,9 @@ export default {
   height: 50px;
 }
 
-.close-alert {
+.btn {
+  height: 50px;
+  width: 50px;
   font-size: 50px;
-  cursor: pointer;
 }
 </style>
