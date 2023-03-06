@@ -1,46 +1,64 @@
 <template>
   <Navbar />
-  <main class="container">
-    <Alert :show="showAlert" text="You need to type something first!" type="warning" @close="showAlert = false" />
-    <section>
-      <AddTodoForm @submit="passTodo" />
-    </section>
-    <TodosList ref="todos" />
-    <section>
 
+  <main class="container">
+    <Alert 
+    message="Todo title is required" 
+    :show="showAlert" 
+    @close="showAlert = false" />
+
+    <section>
+      <AddTodoForm @submit="addTodo" />
+    </section>
+
+    <section>
+      <Todo 
+      v-for="todo in todos" 
+      :key="todo.id" 
+      :title="todo.title" 
+      @remove="removeTodo(todo.id)" />
     </section>
   </main>
 </template>
 
 <script>
-import AddTodoForm from './components/AddTodoForm.vue';
-import Alert from './components/Alert.vue';
-import Navbar from './components/Navbar.vue';
-import TodosList from './components/TodosList.vue';
+import Alert from "./components/Alert.vue";
+import Navbar from "./components/Navbar.vue";
+import AddTodoForm from "./components/AddTodoForm.vue";
+import Todo from "./components/Todo.vue";
+
 export default {
   components: {
     Alert,
     Navbar,
     AddTodoForm,
-    TodosList
+    Todo,
   },
+
   data() {
     return {
-      showAlert: false
-    }
+      todoTitle: "",
+      todos: [],
+      showAlert: false,
+    };
   },
-  methods: {
-    passTodo(title) {
-      if (title != "") {
-        this.$refs.todos.addTodo(title)
-        this.showAlert = false;
-      } else {
-        this.showAlert = true;
-      }
 
-    }
-  }
+  methods: {
+    addTodo(title) {
+      if (title === "") {
+        this.showAlert = true;
+        return;
+      }else{
+        this.showAlert = false;
+      }
+      this.todos.push({
+        title,
+        id: Math.floor(Math.random() * 1000),
+      });
+    },
+    removeTodo(id) {
+      this.todos = this.todos.filter((todo) => todo.id !== id);
+    },
+  },
 };
 </script>
-
-<style scoped></style>

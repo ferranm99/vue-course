@@ -1,43 +1,44 @@
 <template>
-    <div v-if="show" class="alert" :style=" {backgroundColor}">
-      <div>{{ text }}</div>
-      <div @click="$emit('close')" class="close-alert">&times;</div>
-    </div>
+  <div v-if="show" class="alert" :style="{ backgroundColor }">
+    <div>{{ message }}</div>
+    <div @click="$emit('close')" class="close-alert">&times;</div>
+  </div>
 </template>
 
 <script>
-  export default {
-    //props: ['show', 'text', 'type'],
-    props:{
-        text:{
-            required: true,
-            type: String,
-        },
-        show:{
-            required: true,
-            type: Boolean,
-        },
-        type: {
-            default: "danger",
-            validator(value){
-                return ["danger", "warning", "info"].includes(value)
-            }
-        }
+export default {
+  props: {
+    message: {
+      required: true,
+      type: String,
     },
-
-    emits: ['close'],
-
-    computed: {
-        backgroundColor() {
-        const options = {
-            danger: "var(--danger-color)",
-            info: "var(--info-color)",
-            warning: "var(--warning-color)",
-        }
-        return options[this.type];
-        }
+    show: {
+      required: true,
+      type: Boolean,
+    },
+    type: {
+      required: false,
+      default: "danger",
+      validator(value) {
+        return ["danger", "warning", "info"].includes(value);
+      }
     }
-  };
+  },
+
+  computed: {
+    backgroundColor() {
+      const options = {
+        danger: "var(--danger-color)",
+        info: "var(--info-color)",
+        warning: "var(--warning-color)",
+      }
+
+      return options[this.type];
+    }
+  },
+
+  emits: ['close'],
+};
 </script>
 
 <style scoped>
@@ -50,9 +51,9 @@
   border-radius: 10px;
   height: 50px;
 }
-.close-alert{
+
+.close-alert {
   font-size: 50px;
   cursor: pointer;
 }
-
 </style>
