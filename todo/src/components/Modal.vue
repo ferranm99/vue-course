@@ -1,5 +1,5 @@
 <template>
-    <div v-if="show" class="modal">
+    <div v-if="show" ref="modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <slot name="header" />
@@ -21,6 +21,35 @@ export default {
         show: {
             default: false
         }
+    },
+    data() {
+        return {
+            clickListener: (e) => {
+                if (e.target === this.$refs.modal)
+                    this.$emit('close')
+            },
+            closeOnEscapeListener: (e) => {
+                if (e.key === "Escape")
+                    this.$emit('close')
+            }
+        }
+    },
+    emits: ['close'],    //hooks
+    mounted() {
+        console.log('listener added')
+        window.addEventListener("click", this.clickListener)
+        window.addEventListener("keydown", this.closeOnEscapeListener)
+    },
+    beforeUnmount(){
+        console.log('listener removed')
+        window.removeEventListener("click", this.clickListener)
+        window.removeEventListener("keydown", this.closeOnEscapeListener)
+    },
+    beforeCreate() {
+        console.log('before created')
+    },
+    created() {
+        console.log('created')
     }
 }
 </script>
