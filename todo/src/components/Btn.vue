@@ -1,5 +1,5 @@
 <template>
-    <button :style="{ backgroundColor }" @click.prevent="$emit('click')" :class="{ circle: applyCircleClass }">
+    <button :style="{ backgroundColor }" :class="{ circle: applyCircleClass }">
         <slot />
     </button>
 </template>
@@ -7,7 +7,7 @@
 <script>
 export default {
     props: {
-        type: {
+        variant: {
             required: false,
             default: "success",
             validator(value) {
@@ -33,7 +33,7 @@ export default {
                 secondary: "var(--secondary-color)",
             };
 
-            return options[this.type];
+            return options[this.variant];
         },
 
         applyCircleClass() {
@@ -41,7 +41,7 @@ export default {
         },
     },
 
-    emits: ["click"],
+    //emits: ["click"], all html elements by default have a click event, so no needed
 };
 </script>
   

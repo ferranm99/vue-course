@@ -1,7 +1,7 @@
 <template>
   <div v-if="show" class="alert" :style="{ backgroundColor }">
     <div>{{ message }}</div>
-    <Btn circle type="danger" class="btn" @click="$emit('close')">&times;</Btn>
+    <Btn circle variant="danger" class="btn" @click="$emit('close')">&times;</Btn>
   </div>
 </template>
 
