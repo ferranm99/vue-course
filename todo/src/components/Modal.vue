@@ -34,7 +34,8 @@ export default {
             }
         }
     },
-    emits: ['close'],    //hooks
+    emits: ['close'],    
+    //hooks https://vuejs.org/guide/essentials/lifecycle.html#lifecycle-diagram
     mounted() {
         console.log('listener added')
         window.addEventListener("click", this.clickListener)
