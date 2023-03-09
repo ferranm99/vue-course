@@ -1,5 +1,5 @@
 <template>
-    <button :style="{ backgroundColor }" :class="{ circle: applyCircleClass }">
+    <button class="btn" :style="{ backgroundColor }" :class="{ circle: applyCircleClass }" v-bind="$attrs">
         <slot />
     </button>
 </template>
@@ -40,19 +40,21 @@ export default {
             return this.circle;
         },
     },
-
-    //emits: ["click"], all html elements by default have a click event, so no needed
 };
 </script>
   
 <style scoped>
-button {
+.btn {
     color: var(--text-color);
     border: none;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.btn:disabled {
+    opacity: 80%;
 }
 
 .circle {

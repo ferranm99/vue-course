@@ -3,16 +3,18 @@
 
   <main class="container">
     <Modal :show="editTodoForm.show" @close="editTodoForm.show = false">
-      <template v-slot:header>
+      <template #header>
         <h2>Edit Todo</h2>
       </template>
-      <template v-slot:content>
+
+      <template #content>
         <form class="edit-todo-form">
           <div><label>Todo Title</label></div>
           <input type="text" v-model="editTodoForm.todo.title" />
         </form>
       </template>
-      <template v-slot:footer>
+
+      <template #footer>
         <div class="edit-todo-modal-footer">
           <Btn class="edit-todo-submit-btn" @click="updateTodo">Submit</Btn>
           <Btn variant="danger" @click="editTodoForm.show = false">Close</Btn>
@@ -23,12 +25,15 @@
     <Alert :message="alert.message" :show="alert.show" :type="alert.type" @close="alert.show = false" />
 
     <section>
-      <AddTodoForm @submit="addTodo" />
+      <AddTodoForm :isLoading="isPostingTodo" @submit="addTodo" />
     </section>
 
     <section>
-      <Todo v-for="todo in todos" :key="todo.id" :title="todo.title" @edit="showEditTodoForm(todo)"
-        @remove="removeTodo(todo.id)" />
+      <Spinner class="spinner" v-if="isLoading" />
+      <div v-else>
+        <Todo v-for="todo in todos" :key="todo.id" :title="todo.title" @remove="removeTodo(todo.id)"
+          @edit="showEditTodoForm(todo)" />
+      </div>
     </section>
   </main>
 </template>
@@ -40,6 +45,7 @@ import AddTodoForm from "./components/AddTodoForm.vue";
 import Todo from "./components/Todo.vue";
 import Modal from "./components/Modal.vue";
 import Btn from "./components/Btn.vue";
+import Spinner from "./components/Spinner.vue";
 import axios from "axios";
 
 export default {
@@ -49,7 +55,8 @@ export default {
     AddTodoForm,
     Todo,
     Modal,
-    Btn
+    Btn,
+    Spinner
   },
 
   data() {
@@ -61,6 +68,8 @@ export default {
         show: false,
         type: "danger"
       },
+      isLoading: false,
+      isPostingTodo: false,
       editTodoForm: {
         show: false,
         todo: {
@@ -70,19 +79,21 @@ export default {
       }
     };
   },
-  created(){
-      this.fetchTodos()
-    },
+  created() {
+    this.fetchTodos()
+  },
 
   methods: {
-    async fetchTodos(){
+    async fetchTodos() {
       //const res = await fetch('http://localhost:8080/todos')
-      try{
+      this.isLoading = true;
+      try {
         const res = await axios.get('http://localhost:8080/todos')
         this.todos = res.data
-      }catch(e){
+      } catch (e) {
         this.showAlert("Request failed")
       }
+      this.isLoading = false;
     },
     async addTodo(title) {
       if (title.trim() === "") {
@@ -91,11 +102,12 @@ export default {
       } else {
         this.alert.show = false;
       }
-      const res = await axios.post('http://localhost:8080/todos', {title})
-
+      this.isPostingTodo = true;
+      const res = await axios.post('http://localhost:8080/todos', { title })
+      this.isPostingTodo = false;
       this.todos.push(res.data);
     },
-    showAlert(m, type = "danger"){
+    showAlert(m, type = "danger") {
       this.alert.message = m
       this.alert.show = true;
       this.alert.type = type
@@ -119,6 +131,10 @@ export default {
 </script>
 
 <style scoped>
+.spinner {
+  margin: auto;
+  margin-top: 30px;
+}
 .edit-todo-form>input {
   width: 100%;
   height: 30px;
