@@ -20,7 +20,7 @@
       </template>
     </Modal>
 
-    <Alert message="Todo title is required" :show="showAlert" @close="showAlert = false" />
+    <Alert :message="alert.message" :show="alert.show" :type="alert.type" @close="alert.show = false" />
 
     <section>
       <AddTodoForm @submit="addTodo" />
@@ -40,6 +40,7 @@ import AddTodoForm from "./components/AddTodoForm.vue";
 import Todo from "./components/Todo.vue";
 import Modal from "./components/Modal.vue";
 import Btn from "./components/Btn.vue";
+import axios from "axios";
 
 export default {
   components: {
@@ -55,7 +56,11 @@ export default {
     return {
       todoTitle: "",
       todos: [],
-      showAlert: false,
+      alert: {
+        message: "",
+        show: false,
+        type: "danger"
+      },
       editTodoForm: {
         show: false,
         todo: {
@@ -65,22 +70,40 @@ export default {
       }
     };
   },
+  created(){
+      this.fetchTodos()
+    },
 
   methods: {
-    addTodo(title) {
+    async fetchTodos(){
+      //const res = await fetch('http://localhost:8080/todos')
+      try{
+        const res = await axios.get('http://localhost:8080/todos')
+        this.todos = res.data
+      }catch(e){
+        this.showAlert("Request failed")
+      }
+    },
+    async addTodo(title) {
       if (title.trim() === "") {
-        this.showAlert = true;
+        this.showAlert("Todo title required")
         return;
       } else {
-        this.showAlert = false;
+        this.alert.show = false;
       }
-      this.todos.push({
-        title,
-        id: Math.floor(Math.random() * 1000),
-      });
+      const res = await axios.post('http://localhost:8080/todos', {title})
+
+      this.todos.push(res.data);
     },
-    removeTodo(id) {
-      this.todos = this.todos.filter((todo) => todo.id !== id);
+    showAlert(m, type = "danger"){
+      this.alert.message = m
+      this.alert.show = true;
+      this.alert.type = type
+    },
+    async removeTodo(id) {
+      await axios.delete('http://localhost:8080/todos/' + id)
+      //this.todos = this.todos.filter((todo) => todo.id !== id);
+      this.fetchTodos()
     },
     showEditTodoForm(todo) {
       this.editTodoForm.show = true
