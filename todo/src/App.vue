@@ -88,7 +88,7 @@ export default {
       //const res = await fetch('http://localhost:8080/todos')
       this.isLoading = true;
       try {
-        const res = await axios.get('http://localhost:8080/todos')
+        const res = await axios.get('/api/todos')
         this.todos = res.data
       } catch (e) {
         this.showAlert("Request failed")
@@ -103,7 +103,7 @@ export default {
         this.alert.show = false;
       }
       this.isPostingTodo = true;
-      const res = await axios.post('http://localhost:8080/todos', { title })
+      const res = await axios.post('/api/todos', { title })
       this.isPostingTodo = false;
       this.todos.push(res.data);
     },
@@ -113,7 +113,7 @@ export default {
       this.alert.type = type
     },
     async removeTodo(id) {
-      await axios.delete('http://localhost:8080/todos/' + id)
+      await axios.delete('/api/todos/' + id)
       //this.todos = this.todos.filter((todo) => todo.id !== id);
       this.fetchTodos()
     },
@@ -121,9 +121,16 @@ export default {
       this.editTodoForm.show = true
       this.editTodoForm.todo = { ...todo } //copies the data of object instead of reference
     },
-    updateTodo() {
-      const todo = this.todos.find(todo => todo.id === this.editTodoForm.todo.id)
-      todo.title = this.editTodoForm.todo.title
+    async updateTodo() {
+      this.isLoading = true;
+      try {
+        await axios.put('/api/todos/' + this.editTodoForm.todo.id, this.editTodoForm.todo)
+        const todo = this.todos.find(todo => todo.id === this.editTodoForm.todo.id)
+        todo.title = this.editTodoForm.todo.title
+      } catch (e) {
+        this.showAlert("Edit failed")
+      }
+      this.isLoading = false;
       this.editTodoForm.show = false
     }
   },
