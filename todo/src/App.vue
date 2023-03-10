@@ -2,27 +2,19 @@
   <Navbar />
 
   <main class="container">
-    <Modal :show="editTodoForm.show" @close="editTodoForm.show = false">
-      <template #header>
-        <h2>Edit Todo</h2>
-      </template>
+    <EditTodoForm
+      :show="editTodoForm.show"
+      @close="editTodoForm.show = false"
+      @submit="updateTodo"
+      v-model="editTodoForm.todo.title"
+    />
 
-      <template #content>
-        <form class="edit-todo-form">
-          <div><label>Todo Title</label></div>
-          <input type="text" v-model="editTodoForm.todo.title" />
-        </form>
-      </template>
-
-      <template #footer>
-        <div class="edit-todo-modal-footer">
-          <Btn class="edit-todo-submit-btn" @click="updateTodo">Submit</Btn>
-          <Btn variant="danger" @click="editTodoForm.show = false">Close</Btn>
-        </div>
-      </template>
-    </Modal>
-
-    <Alert :message="alert.message" :show="alert.show" :type="alert.type" @close="alert.show = false" />
+    <Alert 
+      :message="alert.message" 
+      :show="alert.show" 
+      :type="alert.type" 
+      @close="alert.show = false" 
+      />
 
     <section>
       <AddTodoForm :isLoading="isPostingTodo" @submit="addTodo" />
@@ -31,7 +23,11 @@
     <section>
       <Spinner class="spinner" v-if="isLoading" />
       <div v-else>
-        <Todo v-for="todo in todos" :key="todo.id" :title="todo.title" @remove="removeTodo(todo.id)"
+        <Todo 
+          v-for="todo in todos" 
+          :key="todo.id" 
+          :title="todo.title" 
+          @remove="removeTodo(todo.id)"
           @edit="showEditTodoForm(todo)" />
       </div>
     </section>
@@ -47,6 +43,7 @@ import Modal from "./components/Modal.vue";
 import Btn from "./components/Btn.vue";
 import Spinner from "./components/Spinner.vue";
 import axios from "axios";
+import EditTodoForm from "./components/EditTodoForm.vue";
 
 export default {
   components: {
@@ -56,8 +53,9 @@ export default {
     Todo,
     Modal,
     Btn,
-    Spinner
-  },
+    Spinner,
+    EditTodoForm
+},
 
   data() {
     return {
@@ -141,20 +139,5 @@ export default {
 .spinner {
   margin: auto;
   margin-top: 30px;
-}
-.edit-todo-form>input {
-  width: 100%;
-  height: 30px;
-  border: 1px solid var(--accent-color);
-}
-
-.edit-todo-modal-footer {
-  display: flex;
-  justify-content: end;
-  padding: 10px;
-}
-
-.edit-todo-submit-btn {
-  margin-right: 5px;
 }
 </style>
