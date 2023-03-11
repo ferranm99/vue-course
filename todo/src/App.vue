@@ -12,7 +12,7 @@
     <Alert 
       :message="alert.message" 
       :show="alert.show" 
-      :type="alert.type" 
+      :variant="alert.variant" 
       @close="alert.show = false" 
       />
 
@@ -64,7 +64,7 @@ export default {
       alert: {
         message: "",
         show: false,
-        type: "danger"
+        variant: "danger"
       },
       isLoading: false,
       isPostingTodo: false,
@@ -105,10 +105,10 @@ export default {
       this.isPostingTodo = false;
       this.todos.push(res.data);
     },
-    showAlert(m, type = "danger") {
+    showAlert(m, variant = "danger") {
       this.alert.message = m
       this.alert.show = true;
-      this.alert.type = type
+      this.alert.variant = variant
     },
     async removeTodo(id) {
       await axios.delete('/api/todos/' + id)

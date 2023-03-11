@@ -1,14 +1,16 @@
 <template>
   <div v-if="show" class="alert" :style="{ backgroundColor }">
     <div>{{ message }}</div>
-    <Btn circle variant="danger" class="btn" @click="$emit('close')">&times;</Btn>
+    <div @click="$emit('close')" class="close-alert">&times;</div>
   </div>
 </template>
 
 <script>
-import Btn from './Btn.vue';
+import { backgroundColor } from '../mixins/backgroundColor';
+
 export default {
-  components: { Btn },
+  mixins: [backgroundColor],
+
   props: {
     message: {
       required: true,
@@ -18,25 +20,6 @@ export default {
       required: true,
       type: Boolean,
     },
-    type: {
-      required: false,
-      default: "danger",
-      validator(value) {
-        return ["danger", "warning", "info"].includes(value);
-      }
-    }
-  },
-
-  computed: {
-    backgroundColor() {
-      const options = {
-        danger: "var(--danger-color)",
-        info: "var(--info-color)",
-        warning: "var(--warning-color)",
-      }
-
-      return options[this.type];
-    }
   },
 
   emits: ['close'],
@@ -54,9 +37,8 @@ export default {
   height: 50px;
 }
 
-.btn {
-  height: 50px;
-  width: 50px;
+.close-alert {
   font-size: 50px;
+  cursor: pointer;
 }
 </style>
