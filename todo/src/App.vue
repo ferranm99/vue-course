@@ -23,6 +23,8 @@
 
 <script setup>
 //with keyword setup we dont need to create setup(){} with all the components and return...
+//react hooks = vue composables
+//vue lifecycle hooks = lifecycle methods
 
 import Alert from "./components/Alert.vue";
 import Navbar from "./components/Navbar.vue";
