@@ -6,12 +6,12 @@
     </svg>
 </template>
   
-<script>
-export default {
-    props: {
-        size: {
-            default: "20px",
-        },
-    },
-};
+<script setup>
+
+const props = defineProps({
+    size: {
+        default: "20px",
+    }
+})
+
 </script>

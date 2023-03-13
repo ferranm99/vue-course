@@ -5,36 +5,40 @@
         </template>
 
         <template #content>
-            <form class="edit-todo-form" @submit.prevent="$emit('submit')">
+            <form class="edit-todo-form" @submit.prevent="emit('submit')">
                 <div>
                     <label>Todo Title</label>
                 </div>
-                <input type="text" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
+                <input type="text" :value="modelValue" @input="emit('update:modelValue', $event.target.value)" />
             </form>
         </template>
 
         <template #footer>
             <div class="edit-todo-modal-footer">
-                <Btn class="edit-todo-submit-btn" @click="$emit('submit')">Submit</Btn>
-                <Btn variant="danger" @click="$emit('close')">Close</Btn>
+                <Btn class="edit-todo-submit-btn" @click="emit('submit')">Submit</Btn>
+                <Btn variant="danger" @click="emit('close')">Close</Btn>
             </div>
         </template>
     </Modal>
 </template>
   
-<script>
+<script setup>
 import Modal from "./Modal.vue";
 import Btn from "./Btn.vue";
 
-export default {
-    components: {
-        Modal,
-        Btn,
+const props = defineProps({
+    modelValue: {
+        default: "",
+        type: String
     },
+    show: {
+        default:false,
+        type: Boolean
+    }
+})
 
-    props: ["modelValue", "show"],
-    emits: ["close", "submit", "update:modelValue"],
-};
+const emit = defineEmits(["close", "submit", "update:modelValue"])
+
 </script>
   
 <style scoped>
