@@ -25,6 +25,7 @@
 //with keyword setup we dont need to create setup(){} with all the components and return...
 //react hooks = vue composables
 //vue lifecycle hooks = lifecycle methods
+//https://vueuse.org many pre-made composables
 
 import Alert from "./components/Alert.vue";
 import Navbar from "./components/Navbar.vue";
@@ -34,15 +35,15 @@ import Spinner from "./components/Spinner.vue";
 import axios from "axios";
 import EditTodoForm from "./components/EditTodoForm.vue";
 import { ref, reactive } from "vue";
+import { useFetch } from "./composables/fetch";
 
-const todos = ref([])
+
 const alert = reactive({
   message: "",
   show: false,
   variant: "danger"
 })
 
-const isLoading = ref(false)
 const isPostingTodo = ref(false)
 const editTodoForm = reactive({
   show: false,
@@ -52,7 +53,7 @@ const editTodoForm = reactive({
   }
 })
 
-async function fetchTodos() {
+/*async function fetchTodos() {
   //const res = await fetch('http://localhost:8080/todos')
   isLoading.value = true;
   try {
@@ -62,7 +63,11 @@ async function fetchTodos() {
     showAlert("Request failed")
   }
   isLoading.value = false;
-}
+}*/
+
+const { data: todos, isLoading } = useFetch("/api/todos", {
+  onError: (e) => showAlert('Failed loading todos')
+})
 
 async function addTodo(title) {
   if (title.trim() === "") {
@@ -84,9 +89,8 @@ function showAlert(m, variant = "danger") {
 }
 
 async function removeTodo(id) {
-  await axios.delete('/api/todos/' + id)
-  //todos = todos.filter((todo) => todo.id !== id);
-  fetchTodos()
+  await axios.delete(`/api/todos/${id}`);
+  todos.value = todos.value.filter((todo) => todo.id !== id);
 }
 
 function showEditTodoForm(todo) {
@@ -106,8 +110,6 @@ async function updateTodo() {
   isLoading.value = false;
   editTodoForm.show = false
 }
-
-fetchTodos()
 
 </script>
 
