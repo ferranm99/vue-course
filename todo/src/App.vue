@@ -36,13 +36,10 @@ import axios from "axios";
 import EditTodoForm from "./components/EditTodoForm.vue";
 import { ref, reactive } from "vue";
 import { useFetch } from "./composables/fetch";
+import { useAlert } from "./composables/alert";
 
 
-const alert = reactive({
-  message: "",
-  show: false,
-  variant: "danger"
-})
+const { alert, showAlert } = useAlert();
 
 const isPostingTodo = ref(false)
 const editTodoForm = reactive({
@@ -80,12 +77,6 @@ async function addTodo(title) {
   const res = await axios.post('/api/todos', { title })
   isPostingTodo.value = false;
   todos.value.push(res.data);
-}
-
-function showAlert(m, variant = "danger") {
-  alert.message = m
-  alert.show = true;
-  alert.variant = variant
 }
 
 async function removeTodo(id) {
