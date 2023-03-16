@@ -6,9 +6,13 @@
 </template>
 
 <script setup>
-import { useBackgroundColor, backgroundColorProps } from "../composables/backgroundColor";
+import {
+  backgroundColorProps,
+  useBackgroundColor,
+} from "../composables/backgroundColor.js";
 
 const props = defineProps({
+  ...backgroundColorProps,
   message: {
     required: true,
     type: String,
@@ -17,7 +21,6 @@ const props = defineProps({
     required: true,
     type: Boolean,
   },
-  ...backgroundColorProps
 });
 
 const emit = defineEmits(["close"]);

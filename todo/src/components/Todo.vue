@@ -1,31 +1,38 @@
 <template>
   <div class="todo">
-    <p>{{ title }}</p>
+    <p>{{ todo.title }}</p>
+    <p>{{ todo.description }}</p>
+    <p>{{ todo.date }}</p>
     <div>
-      <Btn circle variant="secondary" @click="emit('edit')" class="btn edit-todo-btn">
+      <Btn
+        circle
+        variant="secondary"
+        @click="$emit('edit')"
+        class="btn edit-todo-btn"
+      >
         <Pencil />
       </Btn>
-      <Btn circle variant="danger" @click="emit('remove')" class="btn">
+      <Btn circle variant="danger" @click="$emit('remove')" class="btn">
         &times;
       </Btn>
     </div>
   </div>
 </template>
-  
+
 <script setup>
 import Btn from "./Btn.vue";
 import Pencil from "./icons/Pencil.vue";
 
-const props = defineProps({
-  title: {
+defineProps({
+  todo: {
     required: true,
-    type: String,
+    type: Object,
   },
-})
+});
 
-const emit = defineEmits(["remove", "edit"])
+defineEmits(["remove", "edit"]);
 </script>
-  
+
 <style scoped>
 .todo {
   display: flex;
@@ -37,7 +44,7 @@ const emit = defineEmits(["remove", "edit"])
   border-radius: 10px;
 }
 
-.todo>div {
+.todo > div {
   display: flex;
 }
 
@@ -49,5 +56,13 @@ const emit = defineEmits(["remove", "edit"])
   height: 40px;
   width: 40px;
   font-size: 30px;
+}
+
+@media (max-width: 680px) {
+  .todo {
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+  }
 }
 </style>

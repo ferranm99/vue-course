@@ -7,12 +7,9 @@
 
     <div class="links">
       <ul>
-        <li>
-          <RouterLink to="/">Home</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/about">About</RouterLink>
-        </li>
+        <li><RouterLink to="/">Home</RouterLink></li>
+        <li><RouterLink to="/todos/create">Add Todo</RouterLink></li>
+        <li><RouterLink to="/about">About</RouterLink></li>
       </ul>
     </div>
   </nav>
@@ -73,4 +70,5 @@ a.router-link-active {
   .links a {
     font-size: 20px;
   }
-}</style>
+}
+</style>

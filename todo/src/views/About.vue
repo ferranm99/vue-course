@@ -1,1 +1,3 @@
-<template>About todoo app list </template>
+<template>
+About Todo List App Vue
+</template>
