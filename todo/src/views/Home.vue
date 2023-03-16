@@ -1,7 +1,4 @@
 <template>
-    <EditTodoForm :show="editTodoForm.show" @close="editTodoForm.show = false" @submit="updateTodo"
-        v-model="editTodoForm.todo.title" />
-
     <Alert :message="alert.message" :show="alert.show" :variant="alert.variant" @close="alert.show = false" />
 
     <section>
@@ -12,7 +9,7 @@
         <Spinner class="spinner" v-if="isLoading" />
         <div v-else>
             <Todo v-for="todo in todos" :key="todo.id" :title="todo.title" @remove="removeTodo(todo.id)"
-                @edit="showEditTodoForm(todo)" />
+                @edit="$router.push(`/todos/${todo.id}/edit`)" />
         </div>
     </section>
 </template>
@@ -28,7 +25,6 @@ import AddTodoForm from "@/components/AddTodoForm.vue";
 import Todo from "@/components/Todo.vue";
 import Spinner from "@/components/Spinner.vue";
 import axios from "axios";
-import EditTodoForm from "@/components/EditTodoForm.vue";
 import { ref, reactive } from "vue";
 import { useFetch } from "@/composables/fetch";
 import { useAlert } from "@/composables/alert";
@@ -37,13 +33,6 @@ import { useAlert } from "@/composables/alert";
 const { alert, showAlert } = useAlert();
 
 const isPostingTodo = ref(false)
-const editTodoForm = reactive({
-    show: false,
-    todo: {
-        id: 0,
-        title: ""
-    }
-})
 
 /*async function fetchTodos() {
   //const res = await fetch('http://localhost:8080/todos')
@@ -77,24 +66,6 @@ async function addTodo(title) {
 async function removeTodo(id) {
     await axios.delete(`/api/todos/${id}`);
     todos.value = todos.value.filter((todo) => todo.id !== id);
-}
-
-function showEditTodoForm(todo) {
-    editTodoForm.show = true
-    editTodoForm.todo = { ...todo } //copies the data of object instead of reference
-}
-
-async function updateTodo() {
-    isLoading.value = true;
-    try {
-        await axios.put('/api/todos/' + editTodoForm.todo.id, editTodoForm.todo)
-        const todo = todos.value.find(todo => todo.id === editTodoForm.todo.id)
-        todo.title = editTodoForm.todo.title
-    } catch (e) {
-        showAlert("Edit failed")
-    }
-    isLoading.value = false;
-    editTodoForm.show = false
 }
 
 </script>
